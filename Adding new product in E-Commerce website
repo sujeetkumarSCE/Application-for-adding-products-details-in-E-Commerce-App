@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        #product-list {
+            margin-top: 20px;
+        }
+
+        #total {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+   
+<span>
+    <div>
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName">
+        
+        <label for="sellingPrice">Selling Price:</label>
+        <input type="number" id="sellingPrice">
+
+        <button onclick="addProduct()">Add Product</button>
+    </div>
+    </span>
+     <h2>Products</h2>
+
+    <div id="product-list">
+        <!-- Product list will be displayed here -->
+    </div>
+
+    <div id="total">
+        Total: $<span id="totalValue">0</span>
+    </div>
+
+    <script>
+        let products = [];
+
+        function addProduct() {
+            const productName = document.getElementById('productName').value;
+            const sellingPrice = parseFloat(document.getElementById('sellingPrice').value);
+
+            if (productName && !isNaN(sellingPrice) && sellingPrice > 0) {
+                const product = {
+                    name: productName,
+                    price: sellingPrice
+                };
+
+                products.push(product);
+                displayProducts();
+                updateTotal();
+            } else {
+                alert('Please enter valid product name and selling price.');
+            }
+        }
+
+        function displayProducts() {
+            const productListDiv = document.getElementById('product-list');
+            productListDiv.innerHTML = '';
+
+            products.forEach((product, index) => {
+                const productDiv = document.createElement('div');
+                productDiv.innerHTML = `
+                    ${product.name} - $${product.price.toFixed(2)}
+                    <button onclick="deleteProduct(${index})">Delete</button>
+                `;
+                productListDiv.appendChild(productDiv);
+            });
+        }
+
+        function deleteProduct(index) {
+            products.splice(index, 1);
+            displayProducts();
+            updateTotal();
+        }
+
+        function updateTotal() {
+            const totalValueSpan = document.getElementById('totalValue');
+            const total = products.reduce((sum, product) => sum + product.price, 0);
+            totalValueSpan.textContent = total.toFixed(2);
+        }
+    </script>
+</body>
+</html>
